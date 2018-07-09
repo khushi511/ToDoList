@@ -4,7 +4,7 @@ import { addToDoItem, editToDoItem } from '../Action'
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-dates/initialize';
-import { updateState } from '../../infrastructure/utils';
+import { updateState, isEmptyOrNull } from '../../infrastructure/utils';
 import { SingleDatePicker } from 'react-dates';
 import '../../assets/date-picker.less';
 import '../../assets/add-list.less';
@@ -29,25 +29,37 @@ class AddList extends React.Component{
 		this.handleChange = this.handleChange.bind(this);
 		this.onDateChange = this.onDateChange.bind(this);
 		this.onTimeChange = this.onTimeChange.bind(this);
-		this.onSave = this.onSave.bind(this);
+		this.validateInput = this.validateInput.bind(this);
+		this.onSave = this.onSave.bind(this);	
+	}
+	handleChange(e) {		
+		updateState(this, {[e.target.id]: e.target.value});
 	}
 
 	onDateChange(date){
 		updateState(this, {date});
 	}
-	handleChange(e) {		
-		updateState(this, {[e.target.id]: e.target.value});
-	}
+
 	onTimeChange(time){
 		updateState(this, {time})
 	}
+
+	validateInput(){
+		let error = {};
+		isEmptyOrNull(this.state, 'title', error, "Title is Mandatory");
+		isEmptyOrNull(this.state, 'description', error, "Title is Mandatory");
+		updateState(this, {error});
+		return Object.keys(error).length == 0;
+	}
 	onSave(){
-		let reminder = this.state.date && moment(this.state.date).format('DD/MM/YY') + " " + moment(this.state.time).format('HH:mm');
-		this.state.reminder = reminder ? reminder : null;
-		this.props.listItem && this.props.listItem.id ? this.props.editToDoItem && this.props.editToDoItem(this.state):
-		this.props.addToDoItem && this.props.addToDoItem(this.state);
-		alert("To do Item Saved Successfully");
-		this.props.onClose && this.props.onClose();
+		if(this.validateInput()){
+			let reminder = this.state.date && moment(this.state.date).format('DD/MM/YY') + " " + moment(this.state.time).format('HH:mm');
+			this.state.reminder = reminder ? reminder : null;
+			this.props.listItem && this.props.listItem.id ? this.props.editToDoItem && this.props.editToDoItem(this.state):
+			this.props.addToDoItem && this.props.addToDoItem(this.state);
+			alert("To do Item Saved Successfully");
+			this.props.onClose && this.props.onClose();
+		}
 	}
 
 	render(){
@@ -56,12 +68,14 @@ class AddList extends React.Component{
 					<a title="close" className="close-modal" onClick={this.props.onClose}>X</a>
 					<form>
 						<div className="form-group">
-							<label>Title</label>
+							<label>Title <i className="required">*</i></label>
 							<input placeholder="Enter title.." id="title" value={this.state.title} onChange={this.handleChange} />
+							{this.state.error && this.state.error.title ? <label className="error font-size-14">{this.state.error.title}</label>:""}
 						</div>
 						<div className="form-group">
-							<label>Description</label>
+							<label>Description <i className="required">*</i></label>
 							<textarea placeholder="Enter description.." id="description" value={this.state.description} onChange={this.handleChange}></textarea>
+							{this.state.error && this.state.error.description ? <label className="error font-size-14">{this.state.error.description}</label>:""}
 						</div>
 						<div className="form-group">
 							<label>Add Reminder</label>
