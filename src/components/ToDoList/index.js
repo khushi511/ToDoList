@@ -33,6 +33,11 @@ class ToDoList extends React.Component{
 			}, diff*1000);
 		}
 	}
+	componentDidMount(){
+		if(!localStorage.getItem('toDoList')){
+			localStorage.setItem("toDoList", JSON.stringify(this.props.toDoList));
+		}
+	}
 
 	openEditListItem(e, listItem){
 		let newObj = Object.assign({}, this.state, {editPanelActive: true}, {listItem: listItem});
@@ -60,9 +65,10 @@ class ToDoList extends React.Component{
 						<AddList onClose={this.onClose} listItem={this.state.listItem} />
 					</Modal>
 				}
-				<a id={AppConstants.Tabs.All} onClick={this.onTabChanged}>All</a>
+				{/* Tab wise Filter */}
+				{/* <a id={AppConstants.Tabs.All} onClick={this.onTabChanged}>All</a>
 				<a id={AppConstants.Tabs.Completed} onClick={this.onTabChanged}>completed</a>
-				<a id={AppConstants.Tabs.InComplete} onClick={this.onTabChanged}>In complete</a>
+				<a id={AppConstants.Tabs.InComplete} onClick={this.onTabChanged}>In complete</a> */}
 				<ul className="todo-list">
 				{
 					this.props.toDoList && this.props.toDoList.length > 0 && this.props.toDoList.map((listItem, i) => {
