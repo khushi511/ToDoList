@@ -28,7 +28,7 @@ class ToDoList extends React.Component{
 		let givenDateTime  = moment(dateTime, "DD/MM/YYYY HH:mm");
 		let diff = Math.floor((givenDateTime - currentDateTime)/1000);
 		if(diff >= 0){
-			this.id = setTimeout(function(){
+			this[id] = setTimeout(function(){
 				alert("pending Reminder at dateTime" + dateTime);
 			}, diff*1000);
 		}
@@ -74,7 +74,7 @@ class ToDoList extends React.Component{
 				{
 					this.props.toDoList && this.props.toDoList.length > 0 && this.props.toDoList.map((listItem, i) => {
 						//remove previous settimout function if available 
-						typeof(this[listItem.id]) == 'function' && clearTimeout(this[listItem.id]); 
+						this[listItem.id] && clearTimeout(this[listItem.id]); 
 						//setTimer for reminedr
 						listItem.reminder && this.runReminder(listItem.id, listItem.reminder);
 						return( 
