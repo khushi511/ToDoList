@@ -22,15 +22,14 @@ class ToDoList extends React.Component{
 		this.openEditListItem = this.openEditListItem.bind(this);
 		this.onClose = this.onClose.bind(this);
 	}
-	runReminder(dateTime){
+
+	runReminder(id, dateTime){
 		let currentDateTime = moment();
 		let givenDateTime  = moment(dateTime, "DD/MM/YYYY HH:mm");
 		let diff = Math.floor((givenDateTime - currentDateTime)/1000);
 		if(diff >= 0){
-			setTimeout(function(){
-				console.log("I will run now", dateTime);
+			this.id = setTimeout(function(){
 				alert("pending Reminder at dateTime" + dateTime);
-				console.log("Inside runReminder setTimeout")
 			}, diff*1000);
 		}
 	}
@@ -67,7 +66,10 @@ class ToDoList extends React.Component{
 				<ul className="todo-list">
 				{
 					this.props.toDoList && this.props.toDoList.length > 0 && this.props.toDoList.map((listItem, i) => {
-						listItem.reminder && this.runReminder(listItem.reminder);
+						//remove previous settimout function if available 
+						typeof(this[listItem.id]) == 'function' && clearTimeout(this[listItem.id]); 
+						//setTimer for reminedr
+						listItem.reminder && this.runReminder(listItem.id, listItem.reminder);
 						return( 
 							<ToDoListItem 
 								key={"listItem-" + i} 
@@ -76,7 +78,7 @@ class ToDoList extends React.Component{
 								openEditListItem={this.openEditListItem}
 								onDeleteListItem={this.props.deleteToDoItem} />
 							)
-					})
+					}, this)
 				}
 				</ul>
 			</section>
