@@ -65,6 +65,8 @@ class AddList extends React.Component{
 	render(){
 		return(
 				<section className="add-list-section">
+					<h3 className="text-center underline">{this.props.listItem ? "Edit List Item": "Add List Item"}</h3>
+					<hr/>
 					<a title="close" className="close-modal" onClick={this.props.onClose}>X</a>
 					<form>
 						<div className="form-group">
