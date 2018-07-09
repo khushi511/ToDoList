@@ -58,6 +58,7 @@ class ToDoList extends React.Component{
 	render(){
 		return(
 			<section className="todo-list-section">
+				<h2 className="text-center underline">To Do List</h2>
 				<button className="add-list-button" onClick={this.openEditListItem}>+</button>
 				{
 					this.state.editPanelActive && 
