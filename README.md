@@ -1,4 +1,4 @@
-# Wesence
+# TO DO LIST with reminder
 
 Fully Responsive , Simple Todo list project with option to add/Edit list as well as set Reminder.
 Technologies used: Redux, less, webpack, babel, hot-loader.
