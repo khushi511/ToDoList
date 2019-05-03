@@ -1,5 +1,6 @@
 export const Tabs = {
 	All: 'All',
 	Completed: 'Completed',
-	InComplete: 'InComplete'
+	InComplete: 'InComplete',
+	Test: 'Test'
 }
